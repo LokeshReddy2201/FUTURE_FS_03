@@ -7,9 +7,23 @@ import FeaturedProducts from '../components/FeaturedProducts';
 import Footer from '../components/Footer';
 import Cart from '../components/Cart';
 
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  originalPrice: number;
+  discount: number;
+  image: string;
+  rating: number;
+  reviews: number;
+  category: string;
+}
+
 const Index = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
 
   const addToCart = (product: any) => {
     setCartItems(prev => {
@@ -41,15 +55,33 @@ const Index = () => {
     );
   };
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setSelectedCategory(''); // Clear category filter when searching
+    console.log('Searching for:', query);
+  };
+
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    setSearchQuery(''); // Clear search when selecting category
+    console.log('Selected category:', category);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar 
         cartItemsCount={cartItems.reduce((sum, item) => sum + item.quantity, 0)}
         onCartClick={() => setIsCartOpen(true)}
+        onSearch={handleSearch}
+        onCategorySelect={handleCategorySelect}
       />
       <HeroBanner />
-      <CategorySection />
-      <FeaturedProducts onAddToCart={addToCart} />
+      <CategorySection onCategorySelect={handleCategorySelect} />
+      <FeaturedProducts 
+        onAddToCart={addToCart}
+        searchQuery={searchQuery}
+        selectedCategory={selectedCategory}
+      />
       <Footer />
       
       <Cart 

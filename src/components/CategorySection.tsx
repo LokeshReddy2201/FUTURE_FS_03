@@ -10,7 +10,11 @@ const categories = [
   { name: 'Automotive', emoji: '🚗', color: 'bg-gray-100 hover:bg-gray-200' },
 ];
 
-const CategorySection = () => {
+interface CategorySectionProps {
+  onCategorySelect?: (category: string) => void;
+}
+
+const CategorySection = ({ onCategorySelect }: CategorySectionProps) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="text-center mb-8">
@@ -22,6 +26,7 @@ const CategorySection = () => {
         {categories.map((category) => (
           <div
             key={category.name}
+            onClick={() => onCategorySelect?.(category.name)}
             className={`${category.color} rounded-xl p-6 text-center cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md`}
           >
             <div className="text-3xl mb-2">{category.emoji}</div>

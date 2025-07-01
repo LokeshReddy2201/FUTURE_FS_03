@@ -1,6 +1,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Heart, Star } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface Product {
   id: string;
@@ -20,6 +21,23 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
+  const { toast } = useToast();
+
+  const handleAddToCart = () => {
+    onAddToCart();
+    toast({
+      title: "Added to Cart!",
+      description: `${product.name} has been added to your cart.`,
+    });
+  };
+
+  const handleWishlist = () => {
+    toast({
+      title: "Added to Wishlist!",
+      description: `${product.name} has been added to your wishlist.`,
+    });
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden group">
       <div className="relative">
@@ -31,8 +49,11 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
         <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-semibold">
           {product.discount}% OFF
         </div>
-        <button className="absolute top-2 right-2 p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-50 transition-colors">
-          <Heart className="h-4 w-4 text-gray-600" />
+        <button 
+          onClick={handleWishlist}
+          className="absolute top-2 right-2 p-1.5 bg-white rounded-full shadow-sm hover:bg-gray-50 transition-colors group"
+        >
+          <Heart className="h-4 w-4 text-gray-600 group-hover:text-red-500 transition-colors" />
         </button>
       </div>
       
@@ -59,7 +80,7 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
         </div>
         
         <Button 
-          onClick={onAddToCart}
+          onClick={handleAddToCart}
           className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium"
           size="sm"
         >
